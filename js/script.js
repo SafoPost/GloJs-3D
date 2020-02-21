@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  // timer
+  // timer -------------------------------------
   function countTimer(deadline) {
     let timerHours = document.querySelector('#timer-hours');
     let timerMinutes = document.querySelector('#timer-minutes');
@@ -24,18 +24,14 @@ window.addEventListener('DOMContentLoaded', function () {
     function updateClock() {
       let timer = getTimeRemaining();
 
-      if (timer.hours > 24) {
-        timerHours.textContent = timer.days + ' д. ' + ('0' + timer.hours2).slice(-2);
-      } else {
-        timerHours.textContent = ('0' + timer.hours).slice(-2);
-      }
-      timerMinutes.textContent = ('0' + timer.minutes).slice(-2);
-      timerSeconds.textContent = ('0' + timer.seconds).slice(-2);
-
-      let idInterval;
       if (timer.timeRemaining > 0) {
-        // setTimeout(updateClock, 1000);
-        idInterval = setInterval(updateClock, 1000);
+        if (timer.hours > 24) {
+          timerHours.textContent = timer.days + ' д. ' + ('0' + timer.hours2).slice(-2);
+        } else {
+          timerHours.textContent = ('0' + timer.hours).slice(-2);
+        }
+        timerMinutes.textContent = ('0' + timer.minutes).slice(-2);
+        timerSeconds.textContent = ('0' + timer.seconds).slice(-2);
       } else {
         clearInterval(idInterval);
         timerHours.textContent = '00';
@@ -43,31 +39,36 @@ window.addEventListener('DOMContentLoaded', function () {
         timerSeconds.textContent = '00';
       }
     }
-    updateClock();
+    let idInterval = setInterval(updateClock, 1000);
   };
   countTimer('25 February 2020');
 
-  // menu
+  // menu --------------------------------------
   const toggleMenu = () => {
     const btnMenu = document.querySelector('.menu');
     const menu = document.querySelector('menu');
-    const closeBtn = document.querySelector('.close-btn');
-    const menuItems = menu.querySelectorAll('ul>li');
 
     const handlerMenu = () => {
-      menu.classList.toggle('active-menu')
+      menu.classList.toggle('active-menu');
     };
+
     btnMenu.addEventListener('click', handlerMenu);
-    closeBtn.addEventListener('click', handlerMenu);
-    menuItems.forEach((elem) => elem.addEventListener('click', handlerMenu))
+
+    menu.addEventListener('click', (event) => {
+      if (event.target.tagName === 'A') {
+        handlerMenu();
+      }
+    });
   };
   toggleMenu();
 
-  // popup
+  // popup -------------------------------------
   const togglePopup = () => {
+    // Фон модального окна
     const popup = document.querySelector('.popup');
+    // Кнопка вызова модального окна
     const popupBtn = document.querySelectorAll('.popup-btn');
-    const popupClose = document.querySelector('.popup-close');
+    // Модальное окно
     const popupContent = document.querySelector('.popup-content');
     let count = 0;
     let centerInteval;
@@ -82,7 +83,7 @@ window.addEventListener('DOMContentLoaded', function () {
           centerInteval = requestAnimationFrame(popupCenter);
           count++;
           if (count < 11) {
-            popupContent.style.top = count + '%';
+            popupContent.style.top = count * 2 + '%';
           } else {
             cancelAnimationFrame(centerInteval);
           }
@@ -92,32 +93,81 @@ window.addEventListener('DOMContentLoaded', function () {
           popupContent.style.top = '10%';
         } else {
           centerInteval = requestAnimationFrame(popupCenter);
-
         }
       });
     });
 
-    popupClose.addEventListener('click', () => {
-      // popup.style.display = 'none';
-      // popupContent.style.top = '-100%';
-      let popupOut = () => {
-        outInteval = requestAnimationFrame(popupOut);
-        count--;
-        if (count > -50) {
-          popupContent.style.top = count + '%';
-        } else {
-          cancelAnimationFrame(outInteval);
-          popup.style.display = 'none';
-        };
-      };
-      if (window.matchMedia('(max-width: 768px)').matches) {
-        popup.style.display = 'none';
-        popupContent.style.top = '-50%';
+    // Анимация закрытия модального окна
+    const popupOut = () => {
+      outInteval = requestAnimationFrame(popupOut);
+      count--;
+      if (count > -50) {
+        popupContent.style.top = count * 2 + '%';
       } else {
-        outInteval = requestAnimationFrame(popupOut);
+        cancelAnimationFrame(outInteval);
+        popup.style.display = 'none';
+      };
+    };
+
+    // Закрытие модального окна
+    popup.addEventListener('click', (event) => {
+      let target = event.target;
+
+      if (target.classList.contains('popup-close')) {
+        if (window.matchMedia('(max-width: 768px)').matches) {
+          popup.style.display = 'none';
+          popupContent.style.top = '-50%';
+        } else {
+          outInteval = requestAnimationFrame(popupOut);
+        }
       }
-    });
+      target = target.closest('.popup-content')
+      if (!target) {
+        if (window.matchMedia('(max-width: 768px)').matches) {
+          popup.style.display = 'none';
+          popupContent.style.top = '-50%';
+        } else {
+          outInteval = requestAnimationFrame(popupOut);
+        }
+      }
+    })
 
   };
   togglePopup();
+
+  // tabs --------------------------------------
+  const tabs = () => {
+    // Родитель
+    const serviceHeader = document.querySelector('.service-header');
+    // Сам таб
+    const tab = document.querySelectorAll('.service-header-tab');
+    // Контент таба
+    const serviceTab = document.querySelectorAll('.service-tab');
+
+    const toggleServiceTab = (index) => {
+      for (let i = 0; i < serviceTab.length; i++) {
+        if (index === i) {
+          tab[i].classList.add('active');
+          serviceTab[i].classList.remove('d-none');
+        } else {
+          tab[i].classList.remove('active');
+          serviceTab[i].classList.add('d-none');
+        }
+      }
+    }
+    serviceHeader.addEventListener('click', (event) => {
+      let target = event.target;
+      target = target.closest('.service-header-tab');
+      if (target) {
+        tab.forEach((item, i) => {
+          if (item === target) {
+            toggleServiceTab(i);
+          }
+        });
+      };
+    })
+  };
+  tabs();
+
+
 });
