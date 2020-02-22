@@ -47,33 +47,14 @@ window.addEventListener('DOMContentLoaded', function () {
     // const btnMenu = document.querySelector('.menu');
     const menu = document.querySelector('menu');
 
-    const handlerMenu = () => {
-      menu.classList.toggle('active-menu');
-    };
-
-
-    // btnMenu.addEventListener('click', handlerMenu);
-
     document.body.addEventListener('click', (event) => {
       let target = event.target;
-
-      target = target.closest('.menu');
-      if (!target) {
-
-        target = event.target.closest('.close-btn');
-        if (!target) {
-
-          target = event.target.closest('ul>li');
-          if (!target) {
-
-            target = event.target.closest('.active-menu');
-            if (target) {
-              return;
-            }
-          }
-        }
+      console.log(target);
+      if (target.closest('.menu')) {
+        menu.classList.add('active-menu');
+      } else if (target.tagName === 'A' || !target.closest('menu')) {
+        menu.classList.remove('active-menu');
       }
-      handlerMenu();
     });
   };
   toggleMenu();
@@ -189,11 +170,28 @@ window.addEventListener('DOMContentLoaded', function () {
   const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item');
     const btn = document.querySelectorAll('.portfolio-btn');
-    const dot = document.querySelectorAll('.dot');
+    const dots = document.querySelector('.portfolio-dots');
     const slider = document.querySelector('.portfolio-content');
+
+    let dot;
 
     let currentSlide = 0;
     let interval;
+
+    // Добавляем точки по количеству слайдов
+    const addDots = () => {
+      for (let i = 0; i < slide.length; i++) {
+        slide[i];
+        dot = document.createElement('li');
+        dot.classList.add('dot');
+        dots.appendChild(dot);
+        if (slide[i].classList.contains('portfolio-item-active')) {
+          dot.classList.add('dot-active');
+        }
+      };
+      dot = document.querySelectorAll('.dot');
+    };
+    addDots();
 
     // Следующий слайд
     const prevSlide = (elem, index, strClass) => {
