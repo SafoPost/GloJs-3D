@@ -185,7 +185,7 @@ window.addEventListener('DOMContentLoaded', function () {
         dot = document.createElement('li');
         dot.classList.add('dot');
         dots.appendChild(dot);
-        if (slide[i].classList.contains('portfolio-item-active')) {
+        if (slide.classList.contains('portfolio-item-active')) {
           dot.classList.add('dot-active');
         }
       };
