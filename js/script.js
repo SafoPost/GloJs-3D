@@ -173,12 +173,12 @@ window.addEventListener('DOMContentLoaded', function () {
     const dots = document.querySelector('.portfolio-dots');
     const slider = document.querySelector('.portfolio-content');
 
-    let dot;
 
     let currentSlide = 0;
     let interval;
 
     // Добавляем точки по количеству слайдов
+    let dot;
     const addDots = () => {
       for (let i = 0; i < slide.length; i++) {
         slide[i];
