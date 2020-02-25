@@ -44,12 +44,10 @@ window.addEventListener('DOMContentLoaded', function () {
 
   // menu --------------------------------------
   const toggleMenu = () => {
-    // const btnMenu = document.querySelector('.menu');
     const menu = document.querySelector('menu');
 
     document.body.addEventListener('click', (event) => {
       let target = event.target;
-      console.log(target);
       if (target.closest('.menu')) {
         menu.classList.add('active-menu');
       } else if (target.tagName === 'A' || !target.closest('menu')) {
@@ -169,7 +167,7 @@ window.addEventListener('DOMContentLoaded', function () {
   // Slider ------------------------------------
   const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item');
-    const btn = document.querySelectorAll('.portfolio-btn');
+    // const btn = document.querySelectorAll('.portfolio-btn');
     const dots = document.querySelector('.portfolio-dots');
     const slider = document.querySelector('.portfolio-content');
 
@@ -185,9 +183,9 @@ window.addEventListener('DOMContentLoaded', function () {
         dot = document.createElement('li');
         dot.classList.add('dot');
         dots.appendChild(dot);
-        if (slide.classList.contains('portfolio-item-active')) {
+        if (slide[i].classList.contains('portfolio-item-active')) {
           dot.classList.add('dot-active');
-        }
+        };
       };
       dot = document.querySelectorAll('.dot');
     };
@@ -272,9 +270,39 @@ window.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    startSlide(2000);
+    startSlide(3000);
 
   };
   slider();
+
+  // Our team ----------------------------------
+  const ourTeam = () => {
+    const commandPhoto = document.querySelectorAll('.command__photo');
+    const command = document.getElementById('command');
+
+    commandPhoto.forEach((item) => {
+      const image = item.src;
+
+      command.addEventListener('mouseover', (event) => {
+        event.target.src = event.target.dataset.img;
+      });
+      command.addEventListener('mouseout', (event) => {
+        event.target.src = image;
+      });
+
+    });
+
+  };
+  ourTeam();
+
+  // Calc --------------------------------------
+  const getCalc = () => {
+    const calcBlock = document.querySelector('.calc-block');
+    calcBlock.addEventListener('input', (event) => {
+      if (event.target.closest('INPUT'))
+        event.target.value = event.target.value.replace(/\D/, '');
+    });
+  };
+  getCalc();
 
 });
