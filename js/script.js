@@ -313,9 +313,13 @@ window.addEventListener('DOMContentLoaded', function () {
 
       if (calcCount.value > 1) {
         countValue += (calcCount.value - 1) / 10;
+      } else if (calcCount.value === 0) {
+        countValue = 0;
       }
 
-      if (calcDay.value && calcDay.value < 5) {
+      if (calcDay.value === 0) {
+        dayValue = 0;
+      } else if (calcDay.value && calcDay.value < 5) {
         dayValue *= 2;
       } else if (calcDay.value && calcDay.value < 10) {
         dayValue *= 1.5;
@@ -341,5 +345,14 @@ window.addEventListener('DOMContentLoaded', function () {
 
   };
   getCalc(100);
+
+  /* // Validator ---------------------------------
+  const valid = new Validator({
+    selector: '#form1',
+    pattern: {},
+    method: {}
+  });
+
+  valid.init(); */
 
 });
