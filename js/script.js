@@ -346,25 +346,6 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   getCalc(100);
 
-  /*   // Validator ---------------------------------
-    const valid = new Validator({
-      selector: '#form1',
-      pattern: {
-        // phone: /^\d+$/
-      },
-      method: {
-        'phone': [
-          ['notEmpty'],
-          ['pattern', 'phone']
-        ],
-        'email': [
-          ['notEmpty'],
-          ['pattern', 'email']
-        ],
-      }
-    });
-  
-    valid.init(); */
 
   // send_ajax_form ---------------------------------
   const sendForm = () => {
@@ -373,16 +354,31 @@ window.addEventListener('DOMContentLoaded', function () {
     const loadMessage = 'Загрузка...';
     const successMessage = 'Спасибо, мы скоро свяжемся с вами!';
 
-    const form1 = document.getElementById('form1');
+    // const form1 = document.getElementById('form1');
+    // const form2 = document.getElementById('form2');
+    // const form3 = document.getElementById('form3');
+    const forms = document.querySelectorAll('form');
 
     const statusMessage = document.createElement('div');
-    statusMessage.style.cssText = 'font-size: 2.2rem;'
+    statusMessage.style.cssText = `font-size: 2rem;
+      color: white;`;
 
-    form1.addEventListener('submit', (event) => {
+
+    document.body.addEventListener('submit', (event) => {
       event.preventDefault();
-      form1.appendChild(statusMessage);
+
+      let form;
+      if (event.target.closest('form')) {
+        forms.forEach((elem, index) => {
+          if (elem === event.target) {
+            form = forms[index];
+          }
+        });
+      }
+
+      form.appendChild(statusMessage);
       statusMessage.textContent = loadMessage;
-      const formData = new FormData(form1);
+      const formData = new FormData(form);
 
       let body = {};
       formData.forEach((val, key) => {
@@ -394,6 +390,16 @@ window.addEventListener('DOMContentLoaded', function () {
         statusMessage.textContent = errorMessage;
         console.error(error);
       });
+
+      // clear inputs
+      let formInput = document.querySelectorAll('input');
+
+      for (let i = 0; i < formInput.length; i++) {
+        let input = formInput[i];
+        if (form.contains(input)) {
+          input.value = '';
+        }
+      }
     });
 
     const postData = (body, outputData, errorData) => {
@@ -414,14 +420,26 @@ window.addEventListener('DOMContentLoaded', function () {
       request.open('POST', './server.php');
       request.setRequestHeader('Content-Type', 'application/json');
 
-
       request.send(JSON.stringify(body));
 
     };
 
+  };
+  sendForm();
 
-
+  // Validate ---------------------------------
+  const validInput = () => {
+    document.body.addEventListener('input', (event) => {
+      if (event.target.type === 'tel') {
+        event.target.value = event.target.value.replace(/[^0-9-\+]/, '');
+      }
+      if (event.target.type === 'text' || event.target.placeholder === 'Ваше сообщение') {
+        event.target.value = event.target.value.replace(/[^А-ЯЁ а-яё]/, '');
+      }
+    });
   };
 
-  sendForm();
+  validInput();
+
+
 });
