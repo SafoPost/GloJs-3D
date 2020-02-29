@@ -1,7 +1,7 @@
 window.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  // timer -------------------------------------
+  // timer ------------------------------------------
   function countTimer(deadline) {
     let timerHours = document.querySelector('#timer-hours');
     let timerMinutes = document.querySelector('#timer-minutes');
@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   countTimer('29 February 2020');
 
-  // menu --------------------------------------
+  // menu -------------------------------------------
   const toggleMenu = () => {
     const menu = document.querySelector('menu');
 
@@ -57,7 +57,7 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   toggleMenu();
 
-  // popup -------------------------------------
+  // popup ------------------------------------------
   const togglePopup = () => {
     // Фон модального окна
     const popup = document.querySelector('.popup');
@@ -130,7 +130,7 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   togglePopup();
 
-  // tabs --------------------------------------
+  // tabs -------------------------------------------
   const tabs = () => {
     // Родитель
     const serviceHeader = document.querySelector('.service-header');
@@ -164,7 +164,7 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   tabs();
 
-  // Slider ------------------------------------
+  // Slider -----------------------------------------
   const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item');
     // const btn = document.querySelectorAll('.portfolio-btn');
@@ -275,7 +275,7 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   slider();
 
-  // Our team ----------------------------------
+  // Our team ---------------------------------------
   const ourTeam = () => {
     const commandPhoto = document.querySelectorAll('.command__photo');
     const command = document.getElementById('command');
@@ -295,7 +295,7 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   ourTeam();
 
-  // Calc --------------------------------------
+  // Calc -------------------------------------------
   const getCalc = (price = 100) => {
     const calcBlock = document.querySelector('.calc-block');
     const calcType = document.querySelector('.calc-type');
@@ -346,13 +346,82 @@ window.addEventListener('DOMContentLoaded', function () {
   };
   getCalc(100);
 
-  /* // Validator ---------------------------------
-  const valid = new Validator({
-    selector: '#form1',
-    pattern: {},
-    method: {}
-  });
+  /*   // Validator ---------------------------------
+    const valid = new Validator({
+      selector: '#form1',
+      pattern: {
+        // phone: /^\d+$/
+      },
+      method: {
+        'phone': [
+          ['notEmpty'],
+          ['pattern', 'phone']
+        ],
+        'email': [
+          ['notEmpty'],
+          ['pattern', 'email']
+        ],
+      }
+    });
+  
+    valid.init(); */
 
-  valid.init(); */
+  // send_ajax_form ---------------------------------
+  const sendForm = () => {
 
+    const errorMessage = 'Что-то пошло не так...';
+    const loadMessage = 'Загрузка...';
+    const successMessage = 'Спасибо, мы скоро свяжемся с вами!';
+
+    const form1 = document.getElementById('form1');
+
+    const statusMessage = document.createElement('div');
+    statusMessage.style.cssText = 'font-size: 2.2rem;'
+
+    form1.addEventListener('submit', (event) => {
+      event.preventDefault();
+      form1.appendChild(statusMessage);
+      statusMessage.textContent = loadMessage;
+      const formData = new FormData(form1);
+
+      let body = {};
+      formData.forEach((val, key) => {
+        body[key] = val;
+      });
+      postData(body, () => {
+        statusMessage.textContent = successMessage;
+      }, (error) => {
+        statusMessage.textContent = errorMessage;
+        console.error(error);
+      });
+    });
+
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+
+      request.addEventListener('readystatechange', () => {
+
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          outputData();
+        } else {
+          errorData(request.status);
+        }
+      });
+
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'application/json');
+
+
+      request.send(JSON.stringify(body));
+
+    };
+
+
+
+  };
+
+  sendForm();
 });
