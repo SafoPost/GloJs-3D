@@ -125,7 +125,7 @@ window.addEventListener('DOMContentLoaded', function () {
           outInteval = requestAnimationFrame(popupOut);
         }
       }
-    })
+    });
 
   };
   togglePopup();
@@ -279,17 +279,16 @@ window.addEventListener('DOMContentLoaded', function () {
   const ourTeam = () => {
     const commandPhoto = document.querySelectorAll('.command__photo');
     const command = document.getElementById('command');
+    console.log(commandPhoto);
 
-    commandPhoto.forEach((item) => {
-      const image = item.src;
-
-      command.addEventListener('mouseover', (event) => {
-        event.target.src = event.target.dataset.img;
-      });
+    command.addEventListener('mouseover', (event) => {
+      let imageA = event.target.src;
+      let imageB = event.target.dataset.img;
+      event.target.src = imageB;
       command.addEventListener('mouseout', (event) => {
-        event.target.src = image;
+        event.target.src = imageA;
+        event.target.dataset.img = imageB;
       });
-
     });
 
   };
@@ -360,6 +359,7 @@ window.addEventListener('DOMContentLoaded', function () {
     const forms = document.querySelectorAll('form');
 
     const statusMessage = document.createElement('div');
+    statusMessage.classList.add('thanks');
     statusMessage.style.cssText = `font-size: 2rem;
       color: white;`;
 
@@ -399,7 +399,36 @@ window.addEventListener('DOMContentLoaded', function () {
         if (form.contains(input)) {
           input.value = '';
         }
-      }
+      };
+
+      const popup = document.querySelector('.popup');
+      if (statusMessage.closest('#form3') && popup.style.display === 'none') {
+        console.log('gvjOHOYIGU');
+        // form.removeChild('.thanks');
+      };
+
+      // const popupContent = document.querySelector('.popup-content');
+
+      // console.log('gvj');
+      // if (popup.style.display === 'none') {
+      //   console.log('gvjOHOYIGU')
+      //   // form.removeChild(statusMessage);
+      // } else {
+      //   return;
+      // }
+
+
+      // popup.addEventListener('click', (event) => {
+      //   let target = event.target;
+      //   console.log('gvj');
+      //   if (target.classList.contains('popup-close') && !target.closest('.popup-content')) {
+      //     console.log('gvjOHOYIGU');
+      //     form.removeChild(statusMessage);
+      //   }
+
+      // });
+
+
     });
 
     const postData = (body, outputData, errorData) => {
@@ -430,8 +459,13 @@ window.addEventListener('DOMContentLoaded', function () {
   // Validate ---------------------------------
   const validInput = () => {
     document.body.addEventListener('input', (event) => {
+      const patternPhone = /^\+?[0-9]*$/;
       if (event.target.type === 'tel') {
-        event.target.value = event.target.value.replace(/[^0-9-\+]/, '');
+        if (!patternPhone.test(event.target.value)) {
+          event.target.value = '';
+        }
+        // event.target.value = event.target.value.replace(/^\+[0-9]*$/, '');
+        // event.target.value.match(/^\+?[0-9]{10,11}/);
       }
       if (event.target.type === 'text' || event.target.placeholder === 'Ваше сообщение') {
         event.target.value = event.target.value.replace(/[^А-ЯЁ а-яё]/, '');
