@@ -89,6 +89,11 @@ window.addEventListener('DOMContentLoaded', function () {
         } else {
           centerInteval = requestAnimationFrame(popupCenter);
         }
+
+        const statusMessage = document.querySelector('.thanks')
+        if (statusMessage) {
+          statusMessage.remove();
+        }
       });
     });
 
@@ -353,9 +358,6 @@ window.addEventListener('DOMContentLoaded', function () {
     const loadMessage = 'Загрузка...';
     const successMessage = 'Спасибо, мы скоро свяжемся с вами!';
 
-    // const form1 = document.getElementById('form1');
-    // const form2 = document.getElementById('form2');
-    // const form3 = document.getElementById('form3');
     const forms = document.querySelectorAll('form');
 
     const statusMessage = document.createElement('div');
@@ -400,35 +402,6 @@ window.addEventListener('DOMContentLoaded', function () {
           input.value = '';
         }
       };
-
-      const popup = document.querySelector('.popup');
-      if (statusMessage.closest('#form3') && popup.style.display === 'none') {
-        console.log('gvjOHOYIGU');
-        // form.removeChild('.thanks');
-      };
-
-      // const popupContent = document.querySelector('.popup-content');
-
-      // console.log('gvj');
-      // if (popup.style.display === 'none') {
-      //   console.log('gvjOHOYIGU')
-      //   // form.removeChild(statusMessage);
-      // } else {
-      //   return;
-      // }
-
-
-      // popup.addEventListener('click', (event) => {
-      //   let target = event.target;
-      //   console.log('gvj');
-      //   if (target.classList.contains('popup-close') && !target.closest('.popup-content')) {
-      //     console.log('gvjOHOYIGU');
-      //     form.removeChild(statusMessage);
-      //   }
-
-      // });
-
-
     });
 
     const postData = (body, outputData, errorData) => {
@@ -464,8 +437,6 @@ window.addEventListener('DOMContentLoaded', function () {
         if (!patternPhone.test(event.target.value)) {
           event.target.value = '';
         }
-        // event.target.value = event.target.value.replace(/^\+[0-9]*$/, '');
-        // event.target.value.match(/^\+?[0-9]{10,11}/);
       }
       if (event.target.type === 'text' || event.target.placeholder === 'Ваше сообщение') {
         event.target.value = event.target.value.replace(/[^А-ЯЁ а-яё]/, '');
