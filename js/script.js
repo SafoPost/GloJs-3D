@@ -284,7 +284,6 @@ window.addEventListener('DOMContentLoaded', function () {
   const ourTeam = () => {
     const commandPhoto = document.querySelectorAll('.command__photo');
     const command = document.getElementById('command');
-    console.log(commandPhoto);
 
     command.addEventListener('mouseover', (event) => {
       let imageA = event.target.src;
@@ -380,26 +379,31 @@ window.addEventListener('DOMContentLoaded', function () {
 
       form.appendChild(statusMessage);
       statusMessage.textContent = loadMessage;
-      const formData = new FormData(form);
 
+      const formData = new FormData(form);
       let body = {};
       formData.forEach((val, key) => {
         body[key] = val;
       });
 
       postData(body)
-        .then()
-        .catch(error => console.error(error));
-
-      // clear inputs
-      let formInput = document.querySelectorAll('input');
-
-      for (let i = 0; i < formInput.length; i++) {
-        let input = formInput[i];
-        if (form.contains(input)) {
-          input.value = '';
-        }
-      };
+        .then(() => {
+          statusMessage.textContent = successMessage;
+        })
+        .catch(() => {
+          statusMessage.textContent = errorMessage;
+          // console.error(error);
+        })
+        .finally(() => {
+          // clear inputs
+          let formInput = document.querySelectorAll('input');
+          for (let i = 0; i < formInput.length; i++) {
+            let input = formInput[i];
+            if (form.contains(input)) {
+              input.value = '';
+            }
+          };
+        });
     });
 
     const postData = (body) => {
@@ -409,14 +413,13 @@ window.addEventListener('DOMContentLoaded', function () {
         request.addEventListener('readystatechange', () => {
 
           if (request.readyState !== 4) {
+            // reject(statusMessage.textContent = errorMessage);
             return;
           }
           if (request.status === 200) {
-            statusMessage.textContent = successMessage;
-            resolve();
+            resolve(successMessage);
           } else {
-            statusMessage.textContent = errorMessage;
-            reject(request.status);
+            reject(errorMessage);
           }
         });
 
